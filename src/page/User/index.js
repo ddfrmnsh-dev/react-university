@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import User from "../../models/User";
+import Swal from "sweetalert2";
 
 export default function Index() {
   const [name, setName] = useState("");
@@ -73,26 +74,17 @@ export default function Index() {
                     onClick={async () => {
                       setError(null);
                       setIsFieldError(false);
-                      if (!name) {
-                        return setError("Nama harus diisi");
-                      }
-                      if (!email) {
-                        return setError("Email harus diisi");
-                      }
-                      if (!password) {
-                        return setError("Password harus diisi");
-                      } else {
-                        try {
-                          const res = await User.userRegister({
-                            name,
-                            email,
-                            password,
-                          });
-                          console.log(res);
-                        } catch (e) {
-                          setError(e.message);
-                          console.log(e);
-                        }
+                      try {
+                        const res = await User.userRegister({
+                          name,
+                          email,
+                          password,
+                        });
+                        console.log(res);
+                        Swal.fire("Success", res.message, "success");
+                      } catch (e) {
+                        Swal.fire("Error", e.message, "error");
+                        console.log(e);
                       }
                     }}
                   >
